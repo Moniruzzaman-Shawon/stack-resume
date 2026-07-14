@@ -15,10 +15,10 @@ MOCK_AI_RESPONSE = json.dumps({
 
 class TestAIAnalysis(unittest.TestCase):
 
-    @patch("resume_review.services.ai_service.os.getenv", return_value="sk-test")
+    @patch("resume_review.services.ai_service.os.getenv", return_value="test-key")
     @patch("resume_review.services.ai_service.StrOutputParser")
     @patch("resume_review.services.ai_service.ChatPromptTemplate")
-    @patch("resume_review.services.ai_service.ChatOpenAI")
+    @patch("resume_review.services.ai_service.ChatGoogleGenerativeAI")
     def test_returns_dict(self, mock_chat, mock_prompt, mock_parser, mock_getenv):
         mock_instance = MagicMock()
         mock_instance.invoke.return_value = MOCK_AI_RESPONSE
@@ -27,10 +27,10 @@ class TestAIAnalysis(unittest.TestCase):
         result = analyze_resume("Test resume")
         self.assertIsInstance(result, dict)
 
-    @patch("resume_review.services.ai_service.os.getenv", return_value="sk-test")
+    @patch("resume_review.services.ai_service.os.getenv", return_value="test-key")
     @patch("resume_review.services.ai_service.StrOutputParser")
     @patch("resume_review.services.ai_service.ChatPromptTemplate")
-    @patch("resume_review.services.ai_service.ChatOpenAI")
+    @patch("resume_review.services.ai_service.ChatGoogleGenerativeAI")
     def test_has_required_fields(self, mock_chat, mock_prompt, mock_parser, mock_getenv):
         mock_instance = MagicMock()
         mock_instance.invoke.return_value = MOCK_AI_RESPONSE
@@ -40,10 +40,10 @@ class TestAIAnalysis(unittest.TestCase):
         for field in ["strengths", "weaknesses", "missing_skills", "suggestions", "overall_score"]:
             self.assertIn(field, result)
 
-    @patch("resume_review.services.ai_service.os.getenv", return_value="sk-test")
+    @patch("resume_review.services.ai_service.os.getenv", return_value="test-key")
     @patch("resume_review.services.ai_service.StrOutputParser")
     @patch("resume_review.services.ai_service.ChatPromptTemplate")
-    @patch("resume_review.services.ai_service.ChatOpenAI")
+    @patch("resume_review.services.ai_service.ChatGoogleGenerativeAI")
     def test_score_clamped_to_100(self, mock_chat, mock_prompt, mock_parser, mock_getenv):
         mock_instance = MagicMock()
         mock_instance.invoke.return_value = json.dumps({
@@ -56,10 +56,10 @@ class TestAIAnalysis(unittest.TestCase):
         self.assertLessEqual(result["overall_score"], 100)
         self.assertGreaterEqual(result["overall_score"], 0)
 
-    @patch("resume_review.services.ai_service.os.getenv", return_value="sk-test")
+    @patch("resume_review.services.ai_service.os.getenv", return_value="test-key")
     @patch("resume_review.services.ai_service.StrOutputParser")
     @patch("resume_review.services.ai_service.ChatPromptTemplate")
-    @patch("resume_review.services.ai_service.ChatOpenAI")
+    @patch("resume_review.services.ai_service.ChatGoogleGenerativeAI")
     def test_score_clamped_to_0(self, mock_chat, mock_prompt, mock_parser, mock_getenv):
         mock_instance = MagicMock()
         mock_instance.invoke.return_value = json.dumps({
@@ -71,10 +71,10 @@ class TestAIAnalysis(unittest.TestCase):
         result = analyze_resume("Sample")
         self.assertGreaterEqual(result["overall_score"], 0)
 
-    @patch("resume_review.services.ai_service.os.getenv", return_value="sk-test")
+    @patch("resume_review.services.ai_service.os.getenv", return_value="test-key")
     @patch("resume_review.services.ai_service.StrOutputParser")
     @patch("resume_review.services.ai_service.ChatPromptTemplate")
-    @patch("resume_review.services.ai_service.ChatOpenAI")
+    @patch("resume_review.services.ai_service.ChatGoogleGenerativeAI")
     def test_score_is_integer(self, mock_chat, mock_prompt, mock_parser, mock_getenv):
         mock_instance = MagicMock()
         mock_instance.invoke.return_value = json.dumps({
@@ -87,10 +87,10 @@ class TestAIAnalysis(unittest.TestCase):
         self.assertIsInstance(result["overall_score"], int)
         self.assertEqual(result["overall_score"], 82)
 
-    @patch("resume_review.services.ai_service.os.getenv", return_value="sk-test")
+    @patch("resume_review.services.ai_service.os.getenv", return_value="test-key")
     @patch("resume_review.services.ai_service.StrOutputParser")
     @patch("resume_review.services.ai_service.ChatPromptTemplate")
-    @patch("resume_review.services.ai_service.ChatOpenAI")
+    @patch("resume_review.services.ai_service.ChatGoogleGenerativeAI")
     def test_strips_markdown_fences(self, mock_chat, mock_prompt, mock_parser, mock_getenv):
         mock_instance = MagicMock()
         mock_instance.invoke.return_value = "```json\n" + MOCK_AI_RESPONSE + "\n```"
@@ -100,10 +100,10 @@ class TestAIAnalysis(unittest.TestCase):
         self.assertIsInstance(result, dict)
         self.assertIn("overall_score", result)
 
-    @patch("resume_review.services.ai_service.os.getenv", return_value="sk-test")
+    @patch("resume_review.services.ai_service.os.getenv", return_value="test-key")
     @patch("resume_review.services.ai_service.StrOutputParser")
     @patch("resume_review.services.ai_service.ChatPromptTemplate")
-    @patch("resume_review.services.ai_service.ChatOpenAI")
+    @patch("resume_review.services.ai_service.ChatGoogleGenerativeAI")
     def test_strips_fences_without_newline(self, mock_chat, mock_prompt, mock_parser, mock_getenv):
         mock_instance = MagicMock()
         mock_instance.invoke.return_value = "```" + MOCK_AI_RESPONSE + "```"
@@ -112,10 +112,10 @@ class TestAIAnalysis(unittest.TestCase):
         result = analyze_resume("Sample")
         self.assertIsInstance(result, dict)
 
-    @patch("resume_review.services.ai_service.os.getenv", return_value="sk-test")
+    @patch("resume_review.services.ai_service.os.getenv", return_value="test-key")
     @patch("resume_review.services.ai_service.StrOutputParser")
     @patch("resume_review.services.ai_service.ChatPromptTemplate")
-    @patch("resume_review.services.ai_service.ChatOpenAI")
+    @patch("resume_review.services.ai_service.ChatGoogleGenerativeAI")
     def test_strips_plain_markdown_fence(self, mock_chat, mock_prompt, mock_parser, mock_getenv):
         mock_instance = MagicMock()
         mock_instance.invoke.return_value = "```\n" + MOCK_AI_RESPONSE + "\n```"
@@ -129,10 +129,10 @@ class TestAIAnalysis(unittest.TestCase):
             with self.assertRaises(AIAnalysisError):
                 analyze_resume("Test")
 
-    @patch("resume_review.services.ai_service.os.getenv", return_value="sk-test")
+    @patch("resume_review.services.ai_service.os.getenv", return_value="test-key")
     @patch("resume_review.services.ai_service.StrOutputParser")
     @patch("resume_review.services.ai_service.ChatPromptTemplate")
-    @patch("resume_review.services.ai_service.ChatOpenAI")
+    @patch("resume_review.services.ai_service.ChatGoogleGenerativeAI")
     def test_invalid_json_raises(self, mock_chat, mock_prompt, mock_parser, mock_getenv):
         mock_instance = MagicMock()
         mock_instance.invoke.return_value = "not valid json at all"
@@ -141,10 +141,10 @@ class TestAIAnalysis(unittest.TestCase):
         with self.assertRaises(AIAnalysisError):
             analyze_resume("Sample")
 
-    @patch("resume_review.services.ai_service.os.getenv", return_value="sk-test")
+    @patch("resume_review.services.ai_service.os.getenv", return_value="test-key")
     @patch("resume_review.services.ai_service.StrOutputParser")
     @patch("resume_review.services.ai_service.ChatPromptTemplate")
-    @patch("resume_review.services.ai_service.ChatOpenAI")
+    @patch("resume_review.services.ai_service.ChatGoogleGenerativeAI")
     def test_missing_fields_raises(self, mock_chat, mock_prompt, mock_parser, mock_getenv):
         mock_instance = MagicMock()
         mock_instance.invoke.return_value = json.dumps({
@@ -155,10 +155,10 @@ class TestAIAnalysis(unittest.TestCase):
         with self.assertRaises(AIAnalysisError):
             analyze_resume("Sample")
 
-    @patch("resume_review.services.ai_service.os.getenv", return_value="sk-test")
+    @patch("resume_review.services.ai_service.os.getenv", return_value="test-key")
     @patch("resume_review.services.ai_service.StrOutputParser")
     @patch("resume_review.services.ai_service.ChatPromptTemplate")
-    @patch("resume_review.services.ai_service.ChatOpenAI")
+    @patch("resume_review.services.ai_service.ChatGoogleGenerativeAI")
     def test_text_truncation(self, mock_chat, mock_prompt, mock_parser, mock_getenv):
         mock_instance = MagicMock()
         mock_instance.invoke.return_value = MOCK_AI_RESPONSE
@@ -168,10 +168,10 @@ class TestAIAnalysis(unittest.TestCase):
         result = analyze_resume(long_text)
         self.assertIsInstance(result, dict)
 
-    @patch("resume_review.services.ai_service.os.getenv", return_value="sk-test")
+    @patch("resume_review.services.ai_service.os.getenv", return_value="test-key")
     @patch("resume_review.services.ai_service.StrOutputParser")
     @patch("resume_review.services.ai_service.ChatPromptTemplate")
-    @patch("resume_review.services.ai_service.ChatOpenAI")
+    @patch("resume_review.services.ai_service.ChatGoogleGenerativeAI")
     def test_non_list_fields_converted(self, mock_chat, mock_prompt, mock_parser, mock_getenv):
         mock_instance = MagicMock()
         mock_instance.invoke.return_value = json.dumps({
@@ -186,10 +186,10 @@ class TestAIAnalysis(unittest.TestCase):
         result = analyze_resume("Sample")
         self.assertIsInstance(result["strengths"], list)
 
-    @patch("resume_review.services.ai_service.os.getenv", return_value="sk-test")
+    @patch("resume_review.services.ai_service.os.getenv", return_value="test-key")
     @patch("resume_review.services.ai_service.StrOutputParser")
     @patch("resume_review.services.ai_service.ChatPromptTemplate")
-    @patch("resume_review.services.ai_service.ChatOpenAI")
+    @patch("resume_review.services.ai_service.ChatGoogleGenerativeAI")
     def test_empty_string_fields_converted(self, mock_chat, mock_prompt, mock_parser, mock_getenv):
         mock_instance = MagicMock()
         mock_instance.invoke.return_value = json.dumps({

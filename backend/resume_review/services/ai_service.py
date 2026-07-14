@@ -1,7 +1,7 @@
 import json
 import logging
 import os
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
@@ -29,7 +29,6 @@ Be specific, constructive, and actionable in your feedback. Focus on content, st
 IMPORTANT: Return ONLY the JSON object, no additional text or markdown formatting."""
 
 MAX_TEXT_LENGTH = 8000
-MAX_TOKENS = 1500
 
 _llm_instance = None
 
@@ -41,14 +40,13 @@ class AIAnalysisError(Exception):
 def _get_llm():
     global _llm_instance
     if _llm_instance is None:
-        api_key = os.getenv("OPENAI_API_KEY")
+        api_key = os.getenv("GOOGLE_API_KEY")
         if not api_key:
-            raise AIAnalysisError("OPENAI_API_KEY environment variable is not set")
-        _llm_instance = ChatOpenAI(
-            model="gpt-4o",
+            raise AIAnalysisError("GOOGLE_API_KEY environment variable is not set")
+        _llm_instance = ChatGoogleGenerativeAI(
+            model="gemini-2.0-flash",
             temperature=0.3,
-            max_tokens=MAX_TOKENS,
-            api_key=api_key,
+            google_api_key=api_key,
         )
     return _llm_instance
 
