@@ -9,7 +9,7 @@ Stack Resume is an AI-powered resume reviewer that analyzes uploaded PDF resumes
 |-------|-----------|
 | Frontend | React + Vite + Tailwind CSS v4 |
 | Backend | Django + Django REST Framework |
-| AI | LangChain + OpenAI GPT-4o |
+| AI | LangChain + Google Gemini |
 | PDF | pypdf |
 | Icons | Lucide React |
 
@@ -21,7 +21,7 @@ Stack Resume is an AI-powered resume reviewer that analyzes uploaded PDF resumes
 | 2 | PDF Upload | Drag-and-drop zone, file picker, blue-600 dashed border |
 | 3 | File Validation | Reject non-PDFs, reject >5MB files |
 | 4 | PDF Text Extraction | pypdf in-memory processing, no disk writes |
-| 5 | AI Resume Analysis | LangChain + GPT-4o, structured JSON response |
+| 5 | AI Resume Analysis | LangChain + Gemini, structured JSON response |
 | 6 | Score Gauge | Circular progress ring, color-coded (green/yellow/red) |
 | 7 | Section Cards | Strengths, Weaknesses, Missing Skills, Suggestions |
 | 8 | Modern Spinner | Orbital arcs animation + pulsing center + text |
@@ -107,7 +107,7 @@ POST /api/review/
   → Receive PDF file upload (multipart/form-data)
   → Validate file type + size
   → Extract text via pypdf (in-memory)
-  → Send text to LangChain → OpenAI GPT-4o
+  → Send text to LangChain → Google Gemini
   → Structured prompt returns JSON:
       - strengths (string[])
       - weaknesses (string[])
@@ -119,18 +119,18 @@ POST /api/review/
 
 ## Security
 
-- OPENAI_API_KEY in .env only, never exposed to frontend
+- GOOGLE_API_KEY in .env only, never exposed to frontend
 - File upload: validate MIME type + size limit (5MB)
 - In-memory PDF processing only (no disk writes)
 - django-csp for Content Security Policy headers
 - CSRF enabled on API view
 - Rate limiting via django-ratelimit
-- Text length cap before sending to OpenAI
+- Text length cap before sending to Gemini
 
 ## Environment Variables
 
 ```env
-OPENAI_API_KEY=sk-...
+GOOGLE_API_KEY=your-key-here
 DEBUG=True
 ```
 
