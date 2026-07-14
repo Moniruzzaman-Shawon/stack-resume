@@ -44,7 +44,7 @@ def _get_llm():
         if not api_key:
             raise AIAnalysisError("GOOGLE_API_KEY environment variable is not set")
         _llm_instance = ChatGoogleGenerativeAI(
-            model="gemini-2.0-flash",
+            model="gemini-1.5-flash",
             temperature=0.3,
             google_api_key=api_key,
         )
